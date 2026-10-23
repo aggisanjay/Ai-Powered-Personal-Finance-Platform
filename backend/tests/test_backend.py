@@ -7,8 +7,15 @@ from backend.app.core.database import SessionLocal, Base, engine
 from backend.app.models import User, FinancialAccount, Transaction, Category
 from backend.app.ingestion.csv_parser import parse_flexible_date, parse_flexible_amount, preview_csv_content
 from backend.app.services.export_service import sanitize_csv_cell
+from backend.app.seed import seed_demo_data
 
 client = TestClient(app)
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_test_database():
+    """Ensure database schema is created and demo seed data is populated for tests."""
+    Base.metadata.create_all(bind=engine)
+    seed_demo_data()
 
 def test_health_check():
     response = client.get("/api/v1/health")
