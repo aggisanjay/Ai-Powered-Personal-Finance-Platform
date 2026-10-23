@@ -163,51 +163,78 @@ def seed_demo_data():
         for mtx in misclassified_txs:
             mtx.category_id = inv_cat_id
 
-    # Check if September transactions exist
-    sept_count = db.query(Transaction).filter(
-        Transaction.user_id == user.id,
-        Transaction.transaction_date >= date(2026, 9, 1),
-        Transaction.transaction_date <= date(2026, 9, 30)
-    ).count()
+    # Check if transactions exist
+    tx_count = db.query(Transaction).filter(Transaction.user_id == user.id).count()
 
-    if sept_count == 0:
-        print("Seeding September comparison transactions, recurring cycles, and duplicate candidates...")
+    if tx_count < 25:
+        print("Seeding multi-month transactions, recurring cycles, and duplicate candidates...")
         transactions_data = [
+            # October Payroll & Income
+            (date(2026, 10, 1), "Direct Deposit - TechCorp Payroll", "TechCorp", Decimal("5200.00"), "Salary & Income", checking.id),
+            (date(2026, 10, 15), "Consulting Project Payout", "Acme Labs", Decimal("1400.00"), "Investments", checking.id),
+
+            # October Housing & Rent
+            (date(2026, 10, 1), "Monthly Apartment Rent Payment", "Avalon Bay Communities", Decimal("-2100.00"), "Housing & Rent", checking.id),
+
+            # October Groceries
+            (date(2026, 10, 3), "Trader Joe's #142", "Trader Joe's", Decimal("-115.40"), "Groceries", credit_card.id),
+            (date(2026, 10, 10), "Whole Foods Market", "Whole Foods", Decimal("-158.20"), "Groceries", credit_card.id),
+            (date(2026, 10, 17), "Safeway Groceries #882", "Safeway", Decimal("-146.90"), "Groceries", checking.id),
+
+            # October Dining & Cafes
+            (date(2026, 10, 2), "Blue Bottle Coffee", "Blue Bottle", Decimal("-7.50"), "Dining & Cafes", credit_card.id),
+            (date(2026, 10, 6), "Chipotle Mexican Grill", "Chipotle", Decimal("-18.45"), "Dining & Cafes", credit_card.id),
+            (date(2026, 10, 14), "Tartine Bakery & Cafe", "Tartine", Decimal("-28.00"), "Dining & Cafes", credit_card.id),
+            (date(2026, 10, 21), "Downtown Japanese Bistro", "Bistro Tokyo", Decimal("-92.00"), "Dining & Cafes", credit_card.id),
+
+            # October Transport & Fuel
+            (date(2026, 10, 5), "Chevron Station #901", "Chevron", Decimal("-48.50"), "Transport & Fuel", credit_card.id),
+            (date(2026, 10, 18), "Shell Oil #332", "Shell", Decimal("-54.00"), "Transport & Fuel", credit_card.id),
+
+            # October Subscriptions (Recurring)
+            (date(2026, 10, 5), "Netflix Premium Subscription", "Netflix", Decimal("-22.99"), "Subscriptions", credit_card.id),
+            (date(2026, 10, 12), "Spotify Family Plan", "Spotify", Decimal("-16.99"), "Subscriptions", credit_card.id),
+            (date(2026, 10, 14), "GitHub Pro & Copilot", "GitHub", Decimal("-14.00"), "Subscriptions", credit_card.id),
+
+            # October Utilities & Bills
+            (date(2026, 10, 8), "Pacific Gas & Electric Bill", "PG&E", Decimal("-138.50"), "Utilities & Bills", checking.id),
+            (date(2026, 10, 11), "Comcast Xfinity Internet", "Comcast", Decimal("-85.00"), "Utilities & Bills", checking.id),
+
+            # October Duplicate charge candidates (Amazon double charge on same day)
+            (date(2026, 10, 19), "Amazon.com*Order 99182", "Amazon", Decimal("-49.99"), "Shopping", credit_card.id),
+            (date(2026, 10, 19), "Amazon.com*Order 99182", "Amazon", Decimal("-49.99"), "Shopping", credit_card.id),
+
             # September Payroll & Income
             (date(2026, 9, 1), "Direct Deposit - TechCorp Payroll", "TechCorp", Decimal("4500.00"), "Salary & Income", checking.id),
             (date(2026, 9, 15), "Consulting Project Payout", "Acme Labs", Decimal("1250.00"), "Investments", checking.id),
 
-            # Housing & Rent (Recurring)
+            # September Housing & Rent (Recurring)
             (date(2026, 9, 1), "Monthly Apartment Rent Payment", "Avalon Bay Communities", Decimal("-2100.00"), "Housing & Rent", checking.id),
 
-            # Groceries
+            # September Groceries
             (date(2026, 9, 5), "Trader Joe's #142", "Trader Joe's", Decimal("-102.50"), "Groceries", credit_card.id),
             (date(2026, 9, 14), "Whole Foods Market", "Whole Foods", Decimal("-145.20"), "Groceries", credit_card.id),
             (date(2026, 9, 22), "Kroger Supermarket", "Kroger", Decimal("-180.00"), "Groceries", checking.id),
 
-            # Dining & Cafes
+            # September Dining & Cafes
             (date(2026, 9, 4), "Starbucks Coffee #189", "Starbucks", Decimal("-6.95"), "Dining & Cafes", credit_card.id),
             (date(2026, 9, 12), "Local Bistro Dinner", "Local Bistro", Decimal("-88.50"), "Dining & Cafes", credit_card.id),
 
-            # Transport
+            # September Transport
             (date(2026, 9, 8), "Chevron Station #901", "Chevron", Decimal("-52.10"), "Transport & Fuel", credit_card.id),
 
-            # Subscriptions (Recurring ~30 days with October counterparts)
+            # September Subscriptions (Recurring ~30 days with October counterparts)
             (date(2026, 9, 5), "Netflix Premium Subscription", "Netflix", Decimal("-22.99"), "Subscriptions", credit_card.id),
             (date(2026, 9, 12), "Spotify Family Plan", "Spotify", Decimal("-16.99"), "Subscriptions", credit_card.id),
             (date(2026, 9, 14), "GitHub Pro & Copilot", "GitHub", Decimal("-14.00"), "Subscriptions", credit_card.id),
 
-            # Utilities (Recurring)
+            # September Utilities (Recurring)
             (date(2026, 9, 8), "Pacific Gas & Electric Bill", "PG&E", Decimal("-142.30"), "Utilities & Bills", checking.id),
             (date(2026, 9, 11), "Comcast Xfinity Internet", "Comcast", Decimal("-85.00"), "Utilities & Bills", checking.id),
 
-            # September Large Expense in Shopping (to trigger Largest Expense Decrease for October!)
+            # September Large Expense in Shopping (triggers Largest Expense Decrease in October!)
             (date(2026, 9, 16), "IKEA Furniture & Home Decor", "IKEA", Decimal("-1850.00"), "Shopping", credit_card.id),
             (date(2026, 9, 20), "Best Buy Electronics Upgrade", "Best Buy", Decimal("-650.00"), "Shopping", credit_card.id),
-
-            # Duplicate charge candidates for October (Amazon double charge on same day)
-            (date(2026, 10, 19), "Amazon.com*Order 99182", "Amazon", Decimal("-49.99"), "Shopping", credit_card.id),
-            (date(2026, 10, 19), "Amazon.com*Order 99182", "Amazon", Decimal("-49.99"), "Shopping", credit_card.id),
         ]
 
         for d, desc, merch, amt, cat_name, acc_id in transactions_data:
