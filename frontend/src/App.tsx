@@ -34,6 +34,16 @@ const AppContent: React.FC = () => {
   const [viewingLanding, setViewingLanding] = useState<boolean>(!localStorage.getItem('token'));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Automatically transition between Workspace Dashboard and Landing/Login when auth state changes
+  React.useEffect(() => {
+    if (user) {
+      setViewingLanding(false);
+      setActiveTab('dashboard');
+    } else {
+      setViewingLanding(true);
+    }
+  }, [user]);
+
   // If user clicks "Open Workspace" from landing page
   const handleOpenApp = () => {
     if (!user) {
