@@ -6,9 +6,10 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16%2B-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Google Gemini](https://img.shields.io/badge/AI_Engine-Gemini_Flash-8E75B2?logo=google&logoColor=white)](https://ai.google.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 
-A production-grade, secure, multi-tenant personal finance workspace built with **FastAPI**, **PostgreSQL** (with local SQLite fallback), and **React 19 + TypeScript + Tailwind CSS 4**. Designed around the warm, spacious, modern **Elevate visual identity** and engineered with **deterministic financial arithmetic** (zero floating-point errors).
+A production-grade, secure, multi-tenant personal finance workspace built with **FastAPI**, **PostgreSQL** (with local SQLite fallback), **Google Gemini AI**, and **React 19 + TypeScript + Tailwind CSS 4**. Designed around the warm, spacious, modern **Elevate visual identity** and engineered with **deterministic financial arithmetic** (zero floating-point errors) and **real-time AI execution telemetry** (latency, cost, token usage, and model source).
 
 ---
 
@@ -16,6 +17,7 @@ A production-grade, secure, multi-tenant personal finance workspace built with *
 
 - [Core Principles](#-core-principles)
 - [Key Features](#-key-features)
+- [AI Architecture & Real-Time Telemetry](#-ai-architecture--real-time-telemetry)
 - [System Architecture](#-system-architecture)
 - [Repository Structure](#-repository-structure)
 - [Getting Started](#-getting-started)
@@ -37,8 +39,8 @@ A production-grade, secure, multi-tenant personal finance workspace built with *
    All financial metrics, budgets, sums, and month-over-month variances are calculated using Python's `Decimal` module and stored in SQL `NUMERIC(14, 2)` columns. Generative AI is never permitted to perform unverified mental arithmetic.
 2. **Strict Multi-Tenant Row-Level Isolation:**
    Every query explicitly scopes data access to `current_user.id`. Cross-user data leakage is structurally impossible at both ORM and route levels.
-3. **Grounded AI Financial Assistant:**
-   Queries submitted to the financial assistant are verified against actual database records and output parameterized computation facts alongside supporting transactions.
+3. **Grounded AI Financial Assistant with Complete Telemetry:**
+   Natural language queries submitted to the assistant combine verified SQL facts with Google Gemini cloud intelligence. Every response provides real-time telemetry metrics: latency (ms), token usage, estimated cost (USD), and model source.
 4. **Formula Injection & Security Defense:**
    All exported CSV reports escape dangerous formula prefixes (`=`, `+`, `-`, `@`) with single quotes to prevent CSV injection vulnerabilities in Excel or Google Sheets.
 
@@ -54,8 +56,46 @@ A production-grade, secure, multi-tenant personal finance workspace built with *
 - **Duplicate Charge Auditor:** Flags potential double billings (identical amounts to the same merchant within 3 days) with interactive resolution actions (*Confirm Duplicate* / *Distinct Charges*).
 - **Prioritized Categorization Rules Engine:** User-defined rules evaluated in priority order to categorize incoming transactions deterministically.
 - **Receipts & OCR Processing:** Upload receipt files (PNG, JPG, PDF) with extracted merchant, date, and amount field review before committing to the ledger.
-- **Grounded AI Assistant:** Conversational query interface with pre-built prompts (*"How much did I spend on groceries this month?"*, *"What are my recurring subscriptions?"*).
+- **AI Finance Assistant with Live Telemetry:** Plain English query engine providing verified facts, supporting ledger citations, and execution telemetry (latency, token breakdown, estimated cost, and model origin).
 - **Settings & Audit Trail:** Profile management, comprehensive audit event history, sanitized CSV statement export, and permanent account deletion.
+
+---
+
+## 🤖 AI Architecture & Real-Time Telemetry
+
+The platform uses a **Grounded Hybrid Architecture** to prevent hallucinations:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as User / Client
+    participant API as FastAPI Backend
+    participant Calc as Deterministic Engine (SQL + Decimal)
+    participant AI as Gemini Cloud Engine
+    participant DB as Stored Ledger DB
+
+    User->>API: POST /api/v1/assistant/query ("How much did I spend on groceries in Oct?")
+    API->>Calc: Extract intent & compute exact metrics
+    Calc->>DB: Query user-scoped records & category aggregates
+    DB-->>Calc: Verified transaction facts ($420.50 across 12 txs)
+    Calc-->>API: Parametric facts + Supporting transaction IDs
+    API->>AI: Synthesize explanation using facts prompt (Gemini Flash Lite)
+    AI-->>API: Natural language explanation + usageMetadata
+    API->>API: Measure latency (ms), compute tokens & cost ($USD)
+    API-->>User: AssistantQueryResponse (Explanation + Citations + Telemetry)
+```
+
+### Telemetry Metrics Returned on Every AI Query
+
+| Metric | Field | Description | Example |
+| :--- | :--- | :--- | :--- |
+| **Latency** | `latency_ms` | Round-trip execution time measured via `time.perf_counter()` | `2891 ms` |
+| **Tokens** | `total_tokens` | Total tokens consumed (`prompt_tokens` in + `completion_tokens` out) | `132 (81 in / 51 out)` |
+| **Cost** | `cost_usd` | Estimated USD API cost computed from standard model token pricing | `$0.000021` |
+| **Source Engine** | `model_source` | Active model tier or automated offline fallback engine | `Gemini Flash Lite (Cloud Grounded)` |
+
+> [!NOTE]
+> If `GEMINI_API_KEY` is absent or the cloud API experiences upstream rate limits, the assistant automatically falls back to the **Grounded Financial AI Engine (Safe Fallback)**, ensuring the chat interface never hangs or errors.
 
 ---
 
@@ -68,12 +108,14 @@ graph TD
     Auth["JWT Bearer + Argon2id Hash"]
     Services["Domain Services (Rules, Ingestion, OCR, Audit)"]
     Calc["Deterministic Analytics Engine (Decimal Math)"]
+    LLM["AI Engine (Gemini / Telemetry Tracker)"]
     DB[(PostgreSQL / SQLite)]
 
     Client -->|HTTPS / JSON| API
     API --> Auth
     API --> Services
     API --> Calc
+    API --> LLM
     Services --> DB
     Calc --> DB
 ```
@@ -86,7 +128,7 @@ graph TD
 Ai-Powered-Personal-Finance-Platform/
 ├── backend/
 │   ├── app/
-│   │   ├── ai/               # Grounded assistant & LLM integrations
+│   │   ├── ai/               # Grounded assistant & Gemini LLM synthesis client
 │   │   ├── analytics/        # Decimal arithmetic, trends, recurring & duplicate detectors
 │   │   ├── api/              # FastAPI route controllers (v1)
 │   │   │   └── v1/           # auth, accounts, transactions, budgets, analytics, imports, receipts, rules, assistant, settings
@@ -125,6 +167,7 @@ Ai-Powered-Personal-Finance-Platform/
 - **Python**: 3.12 or newer
 - **Node.js**: 20.x or newer & `npm`
 - **Database**: PostgreSQL (recommended, e.g. [Neon](https://neon.tech)) or local SQLite fallback
+- **AI Key (Optional)**: Google Gemini API key (`GEMINI_API_KEY`) for cloud LLM synthesis
 
 ---
 
@@ -151,7 +194,11 @@ Ai-Powered-Personal-Finance-Platform/
    # Copy template to .env
    cp .env.example .env
    ```
-   *Note: By default, `DATABASE_URL` can point to your Neon PostgreSQL connection string or local SQLite `sqlite:///./finance.db`.*
+   Add your database connection string and optional Gemini API key:
+   ```env
+   DATABASE_URL="postgresql://neondb_owner:password@ep-host.region.aws.neon.tech/neondb?sslmode=require"
+   GEMINI_API_KEY="your-gemini-api-key-here"
+   ```
 
 4. **Seed demo data (Optional but recommended):**
    ```powershell
@@ -258,7 +305,7 @@ All protected endpoints require an `Authorization: Bearer <token>` header obtain
 | **Receipts** | `POST` | `/api/v1/receipts/{id}/confirm` | Convert verified receipt into ledger transaction |
 | **Rules** | `GET` | `/api/v1/rules/` | List prioritized categorization rules |
 | **Rules** | `POST` | `/api/v1/rules/` | Create prioritized rule with dry-run preview |
-| **Assistant** | `POST` | `/api/v1/assistant/query` | Ask grounded natural-language financial questions |
+| **Assistant** | `POST` | `/api/v1/assistant/query` | Ask grounded natural-language financial questions (with AI telemetry) |
 | **Settings** | `GET` | `/api/v1/settings/audit-logs` | Retrieve chronological user action log |
 | **Settings** | `GET` | `/api/v1/settings/export/csv` | Export sanitized CSV statement |
 | **Settings** | `DELETE`| `/api/v1/settings/account` | Permanently wipe user account and all financial data |
@@ -294,6 +341,7 @@ npm run build
 - **Zero Banking Login Credentials:** The platform does not request, store, or handle third-party banking credentials. Ingestion is completed via user-controlled CSV statements and receipts.
 - **CSV Formula Injection Mitigation:** Sanitizes leading characters (`=`, `+`, `-`, `@`) with a prepended single-quote (`'`) on data export.
 - **Deterministic Arithmetic:** Guaranteed absence of floating-point arithmetic errors via Python's native `Decimal` and SQL `NUMERIC(14, 2)`.
+- **AI Safety & Zero Hallucination:** Computations are performed deterministically in SQL/Python before prompting the LLM. The AI only synthesizes the final explanatory prose.
 
 ---
 
