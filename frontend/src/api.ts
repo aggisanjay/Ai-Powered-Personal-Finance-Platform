@@ -6,7 +6,8 @@ import {
   CSVPreviewResponse
 } from './types';
 
-const API_BASE = '/api/v1';
+const ENV_API_URL = import.meta.env.VITE_API_BASE_URL || '';
+const API_BASE = ENV_API_URL ? `${ENV_API_URL.replace(/\/+$/, '')}/api/v1` : '/api/v1';
 
 function getAuthHeader(): Record<string, string> {
   const token = localStorage.getItem('token');
