@@ -6,9 +6,18 @@ import {
   CSVPreviewResponse
 } from './types';
 
+// Automatically fallback to your active Render production backend if VITE_API_BASE_URL is not provided or misconfigured
+const DEFAULT_PROD_API = 'https://ai-powered-personal-finance-platform-v2iw.onrender.com';
+
 let rawApiUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
+
+if (!rawApiUrl && typeof window !== 'undefined' && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+  // If running on a live domain (like Vercel) without env var configured, use the live Render backend
+  rawApiUrl = DEFAULT_PROD_API;
+}
+
 if (rawApiUrl) {
-  // Auto-correct common typo where user enters 'https//' instead of 'https://'
+  // Auto-correct any missing colon or protocol typos
   if (rawApiUrl.startsWith('https//')) {
     rawApiUrl = rawApiUrl.replace('https//', 'https://');
   } else if (rawApiUrl.startsWith('http//')) {
@@ -17,6 +26,7 @@ if (rawApiUrl) {
     rawApiUrl = `https://${rawApiUrl}`;
   }
 }
+
 const API_BASE = rawApiUrl ? `${rawApiUrl.replace(/\/+$/, '')}/api/v1` : '/api/v1';
 
 function getAuthHeader(): Record<string, string> {
