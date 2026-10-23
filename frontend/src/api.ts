@@ -6,8 +6,18 @@ import {
   CSVPreviewResponse
 } from './types';
 
-const ENV_API_URL = import.meta.env.VITE_API_BASE_URL || '';
-const API_BASE = ENV_API_URL ? `${ENV_API_URL.replace(/\/+$/, '')}/api/v1` : '/api/v1';
+let rawApiUrl = (import.meta.env.VITE_API_BASE_URL || '').trim();
+if (rawApiUrl) {
+  // Auto-correct common typo where user enters 'https//' instead of 'https://'
+  if (rawApiUrl.startsWith('https//')) {
+    rawApiUrl = rawApiUrl.replace('https//', 'https://');
+  } else if (rawApiUrl.startsWith('http//')) {
+    rawApiUrl = rawApiUrl.replace('http//', 'http://');
+  } else if (!rawApiUrl.startsWith('http://') && !rawApiUrl.startsWith('https://')) {
+    rawApiUrl = `https://${rawApiUrl}`;
+  }
+}
+const API_BASE = rawApiUrl ? `${rawApiUrl.replace(/\/+$/, '')}/api/v1` : '/api/v1';
 
 function getAuthHeader(): Record<string, string> {
   const token = localStorage.getItem('token');
