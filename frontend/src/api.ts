@@ -114,7 +114,10 @@ export const api = {
     end_date?: string;
     limit?: number;
   }): Promise<Transaction[]> {
-    const url = new URL(`${window.location.origin}${API_BASE}/transactions`);
+    let targetUrlStr = API_BASE.startsWith('http://') || API_BASE.startsWith('https://')
+      ? `${API_BASE}/transactions`
+      : `${window.location.origin}${API_BASE}/transactions`;
+    const url = new URL(targetUrlStr);
     if (params) {
       Object.entries(params).forEach(([k, v]) => {
         if (v !== undefined && v !== null && v !== '') {
