@@ -57,22 +57,18 @@ export const AnalyticsPage: React.FC = () => {
     })) || [];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-8 page-stagger">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111111]">
-            Spending Trends & Pattern Analysis
-          </h1>
-          <p className="text-sm text-[#706F6A] mt-0.5">
-            Deterministic category breakdowns, recurring subscriptions, and duplicate audit
-          </p>
+          <h1 className="font-display text-[34px] sm:text-[40px] leading-[1.02] tracking-[-0.01em] text-ink">Analytics</h1>
+          <p className="text-sm text-muted mt-2 max-w-xl leading-relaxed">Category breakdowns, recurring charges and duplicate checks.</p>
         </div>
 
         <select
           value={periodMonth}
           onChange={(e) => setPeriodMonth(e.target.value)}
-          className="px-3 py-2 rounded-xl border border-[#E9E1D5] bg-white text-xs font-medium text-[#111111] focus:outline-hidden"
+          className="px-3 py-2 rounded-xl border border-line bg-white text-[13px] font-medium text-ink focus:outline-hidden"
         >
           <option value="2026-10">October 2026</option>
           <option value="2026-09">September 2026</option>
@@ -83,12 +79,12 @@ export const AnalyticsPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="elevate-card p-5 bg-white flex items-center justify-between">
           <div>
-            <span className="text-xs font-medium text-[#706F6A]">Largest Expense Increase</span>
-            <div className="text-lg font-bold text-[#111111] mt-1">
+            <span className="text-[13px] font-medium text-muted">Largest Expense Increase</span>
+            <div className="text-lg font-bold text-ink mt-1">
               {trends?.largest_increase ? trends.largest_increase.category_name : 'None detected'}
             </div>
             {trends?.largest_increase && (
-              <span className="text-xs text-red-600 font-semibold">
+              <span className="text-[13px] text-red-600 font-semibold">
                 +${Number(trends.largest_increase.mom_change_amount || 0).toFixed(2)} vs prior month
               </span>
             )}
@@ -100,19 +96,19 @@ export const AnalyticsPage: React.FC = () => {
 
         <div className="elevate-card p-5 bg-white flex items-center justify-between">
           <div>
-            <span className="text-xs font-medium text-[#706F6A]">Largest Expense Decrease</span>
-            <div className="text-lg font-bold text-[#111111] mt-1">
+            <span className="text-[13px] font-medium text-muted">Largest Expense Decrease</span>
+            <div className="text-lg font-bold text-ink mt-1">
               {trends?.largest_decrease && Number(trends.largest_decrease.mom_change_amount || 0) < 0
                 ? trends.largest_decrease.category_name
                 : 'None detected'}
             </div>
             {trends?.largest_decrease && Number(trends.largest_decrease.mom_change_amount || 0) < 0 && (
-              <span className="text-xs text-[#287650] font-semibold">
+              <span className="text-[13px] text-ok font-semibold">
                 -${Math.abs(Number(trends.largest_decrease.mom_change_amount || 0)).toFixed(2)} vs prior month
               </span>
             )}
           </div>
-          <div className="w-10 h-10 rounded-2xl bg-green-50 text-[#287650] flex items-center justify-center">
+          <div className="w-10 h-10 rounded-2xl bg-green-50 text-ok flex items-center justify-center">
             <TrendingDown className="w-5 h-5" />
           </div>
         </div>
@@ -123,8 +119,8 @@ export const AnalyticsPage: React.FC = () => {
         {/* Donut Chart */}
         <div className="elevate-card p-6 bg-white flex flex-col justify-between">
           <div>
-            <h3 className="text-base font-bold text-[#111111] mb-1">Expense Breakdown</h3>
-            <p className="text-xs text-[#706F6A] mb-4">Proportion of total monthly spending</p>
+            <h3 className="text-base font-bold text-ink mb-1">Expense Breakdown</h3>
+            <p className="text-[13px] text-muted mb-4">Proportion of total monthly spending</p>
           </div>
 
           <div className="h-64 w-full flex items-center justify-center">
@@ -151,7 +147,7 @@ export const AnalyticsPage: React.FC = () => {
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="text-center text-xs text-[#706F6A]">
+              <div className="text-center text-[13px] text-muted">
                 No category expenses recorded for this month.
               </div>
             )}
@@ -160,12 +156,12 @@ export const AnalyticsPage: React.FC = () => {
 
         {/* Category Table */}
         <div className="lg:col-span-2 elevate-card bg-white overflow-hidden">
-          <div className="p-4 bg-[#F8F3E9] border-b border-[#E9E1D5] text-xs font-bold text-[#111111]">
+          <div className="p-4 bg-sand border-b border-line text-[13px] font-bold text-ink">
             Detailed Spending by Category
           </div>
           <div className="overflow-x-auto max-h-80">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-[#FFFCF5] text-[#706F6A] border-b border-[#E9E1D5]">
+            <table className="app-table w-full text-left text-[13px]">
+              <thead className="bg-paper text-muted border-b border-line">
                 <tr>
                   <th className="py-2.5 px-4">Category</th>
                   <th className="py-2.5 px-4 text-right">Amount</th>
@@ -173,26 +169,26 @@ export const AnalyticsPage: React.FC = () => {
                   <th className="py-2.5 px-4 text-right">MoM Change</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E9E1D5]">
+              <tbody className="divide-y divide-line">
                 {trends?.categories.map((c) => (
-                  <tr key={c.category_id} className="hover:bg-[#FFFCF5]">
-                    <td className="py-3 px-4 font-semibold text-[#111111] flex items-center gap-2">
+                  <tr key={c.category_id} className="hover:bg-paper">
+                    <td className="py-3 px-4 font-semibold text-ink flex items-center gap-2">
                       <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: c.category_color }} />
                       <span>{c.category_name}</span>
                     </td>
-                    <td className="py-3 px-4 text-right font-bold text-[#111111]">
+                    <td className="py-3 px-4 text-right font-bold text-ink">
                       ${Number(c.amount).toFixed(2)}
                     </td>
-                    <td className="py-3 px-4 text-right text-[#706F6A]">
+                    <td className="py-3 px-4 text-right text-muted">
                       {c.percentage}%
                     </td>
                     <td className="py-3 px-4 text-right font-medium">
                       {c.mom_change_amount !== null ? (
-                        <span className={Number(c.mom_change_amount) > 0 ? 'text-red-600' : 'text-[#287650]'}>
+                        <span className={Number(c.mom_change_amount) > 0 ? 'text-red-600' : 'text-ok'}>
                           {Number(c.mom_change_amount) > 0 ? '+' : ''}${Number(c.mom_change_amount).toFixed(2)}
                         </span>
                       ) : (
-                        <span className="text-[#969087]">New</span>
+                        <span className="text-muted">New</span>
                       )}
                     </td>
                   </tr>
@@ -208,25 +204,25 @@ export const AnalyticsPage: React.FC = () => {
         {/* Recurring Payments */}
         <div className="elevate-card p-6 bg-white space-y-4">
           <div className="flex items-center gap-2">
-            <Repeat className="w-5 h-5 text-[#FF6908]" />
-            <h3 className="text-base font-bold text-[#111111]">Recurring Expenses & Subscriptions</h3>
+            <Repeat className="w-5 h-5 text-ember-deep" />
+            <h3 className="text-base font-bold text-ink">Recurring Expenses & Subscriptions</h3>
           </div>
-          <p className="text-xs text-[#706F6A]">
+          <p className="text-[13px] text-muted">
             Detected automatically based on repeated merchant transactions occurring in consistent cycles (~30 days).
           </p>
 
           <div className="space-y-3">
             {recurring.length > 0 ? (
               recurring.map((rec) => (
-                <div key={rec.id} className="p-3.5 rounded-2xl bg-[#FFFCF5] border border-[#E9E1D5] flex items-center justify-between text-xs">
+                <div key={rec.id} className="p-3.5 rounded-2xl bg-paper border border-line flex items-center justify-between text-[13px]">
                   <div>
-                    <div className="font-bold text-[#111111]">{rec.merchant}</div>
-                    <div className="text-[#706F6A] text-[11px]">
+                    <div className="font-bold text-ink">{rec.merchant}</div>
+                    <div className="text-muted text-[11px]">
                       Occurred {rec.occurrences_count} times · ~{rec.interval_days} day cycle
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-bold text-[#111111]">${Number(rec.amount).toFixed(2)}/mo</div>
+                    <div className="font-bold text-ink">${Number(rec.amount).toFixed(2)}/mo</div>
                     <span className="text-[10px] px-1.5 py-0.5 rounded-sm bg-purple-50 text-purple-700 font-semibold">
                       {(Number(rec.confidence) * 100).toFixed(0)}% confidence
                     </span>
@@ -234,7 +230,7 @@ export const AnalyticsPage: React.FC = () => {
                 </div>
               ))
             ) : (
-              <div className="p-6 text-center text-xs text-[#706F6A]">
+              <div className="p-6 text-center text-[13px] text-muted">
                 No recurring subscriptions detected yet.
               </div>
             )}
@@ -245,18 +241,18 @@ export const AnalyticsPage: React.FC = () => {
         <div className="elevate-card p-6 bg-white space-y-4">
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-5 h-5 text-amber-600" />
-            <h3 className="text-base font-bold text-[#111111]">Duplicate Charge Auditor</h3>
+            <h3 className="text-base font-bold text-ink">Duplicate Charge Auditor</h3>
           </div>
-          <p className="text-xs text-[#706F6A]">
+          <p className="text-[13px] text-muted">
             Identifies possible double billings: identical amounts to the same merchant within 3 days.
           </p>
 
           <div className="space-y-3">
             {duplicates.length > 0 ? (
               duplicates.map((dup) => (
-                <div key={dup.id} className="p-3.5 rounded-2xl bg-[#FFF5DF] border border-[#E9E1D5] space-y-2 text-xs">
+                <div key={dup.id} className="p-3.5 rounded-2xl bg-cream border border-line space-y-2 text-[13px]">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-[#111111]">Candidate #{dup.id}</span>
+                    <span className="font-bold text-ink">Candidate #{dup.id}</span>
                     <span className={`text-[10px] px-2 py-0.5 rounded-sm font-semibold ${
                       dup.status === 'confirmed_duplicate'
                         ? 'bg-red-100 text-red-700'
@@ -267,7 +263,7 @@ export const AnalyticsPage: React.FC = () => {
                       {dup.status}
                     </span>
                   </div>
-                  <div className="text-[#706F6A] text-[11px]">{dup.reason}</div>
+                  <div className="text-muted text-[11px]">{dup.reason}</div>
                   {dup.status === 'detected' && (
                     <div className="flex items-center gap-2 pt-1">
                       <button
@@ -278,7 +274,7 @@ export const AnalyticsPage: React.FC = () => {
                       </button>
                       <button
                         onClick={() => handleResolveDuplicate(dup.id, 'keep_both')}
-                        className="px-2.5 py-1 rounded-lg bg-white border border-[#E9E1D5] text-[#111111] text-[11px] font-medium hover:bg-[#F8F3E9]"
+                        className="px-2.5 py-1 rounded-lg bg-white border border-line text-ink text-[11px] font-medium hover:bg-sand"
                       >
                         Distinct Charges
                       </button>
@@ -287,7 +283,7 @@ export const AnalyticsPage: React.FC = () => {
                 </div>
               ))
             ) : (
-              <div className="p-6 text-center text-xs text-[#706F6A]">
+              <div className="p-6 text-center text-[13px] text-muted">
                 No potential duplicate charges found.
               </div>
             )}

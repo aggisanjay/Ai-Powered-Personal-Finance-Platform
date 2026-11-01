@@ -121,28 +121,24 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
+    <div className="max-w-4xl mx-auto space-y-6 page-stagger">
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111111]">
-          Statement Import Wizard
-        </h1>
-        <p className="text-sm text-[#706F6A] mt-0.5">
-          Upload bank or credit card CSV statements with interactive column mapping
-        </p>
+        <h1 className="font-display text-[34px] sm:text-[40px] leading-[1.02] tracking-[-0.01em] text-ink">Import a statement</h1>
+        <p className="text-sm text-muted mt-2 max-w-xl leading-relaxed">Upload a bank or card CSV and confirm the column mapping before anything is saved.</p>
       </div>
 
       {/* Progress Steps */}
-      <div className="flex items-center gap-4 py-2 border-b border-[#E9E1D5] text-xs font-semibold">
-        <span className={step >= 1 ? 'text-[#111111]' : 'text-[#969087]'}>1. Upload Statement</span>
+      <div className="flex items-center gap-4 py-2 border-b border-line text-[13px] font-semibold">
+        <span className={step >= 1 ? 'text-ink' : 'text-muted'}>1. Upload Statement</span>
         <span className="text-[#E9E1D5]">/</span>
-        <span className={step >= 2 ? 'text-[#111111]' : 'text-[#969087]'}>2. Map & Preview Rows</span>
+        <span className={step >= 2 ? 'text-ink' : 'text-muted'}>2. Map & Preview Rows</span>
         <span className="text-[#E9E1D5]">/</span>
-        <span className={step >= 3 ? 'text-[#111111]' : 'text-[#969087]'}>3. Import Summary</span>
+        <span className={step >= 3 ? 'text-ink' : 'text-muted'}>3. Import Summary</span>
       </div>
 
       {error && (
-        <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-center gap-2">
+        <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-[13px] text-red-700 flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
@@ -150,16 +146,16 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
 
       {/* Step 1: File Dropzone */}
       {step === 1 && (
-        <div className="elevate-card p-12 bg-white text-center border-2 border-dashed border-[#E9E1D5] hover:border-[#111111] transition-all">
-          <div className="w-16 h-16 rounded-3xl bg-[#FFF0E2] text-[#FF6908] flex items-center justify-center mx-auto mb-4">
+        <div className="elevate-card p-12 bg-white text-center border-2 border-dashed border-line hover:border-[#111111] transition-all">
+          <div className="w-16 h-16 rounded-3xl bg-ember-soft text-ember-deep flex items-center justify-center mx-auto mb-4">
             <Upload className="w-8 h-8" />
           </div>
-          <h3 className="text-lg font-bold text-[#111111] mb-1">Upload your bank statement (CSV)</h3>
-          <p className="text-xs text-[#706F6A] max-w-sm mx-auto mb-6">
+          <h3 className="text-lg font-bold text-ink mb-1">Upload your bank statement (CSV)</h3>
+          <p className="text-[13px] text-muted max-w-sm mx-auto mb-6">
             Supports CSV statements from Chase, Bank of America, Wells Fargo, Amex, Capital One, or custom exports.
           </p>
 
-          <label className="btn-black px-6 py-3 text-xs font-medium cursor-pointer inline-flex items-center gap-2">
+          <label className="btn-black px-6 py-3 text-[13px] font-medium cursor-pointer inline-flex items-center gap-2">
             <span>{loading ? 'Inspecting file...' : 'Select CSV File'}</span>
             <input
               type="file"
@@ -178,13 +174,13 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
           {/* Target Account & Rules Config */}
           <div className="elevate-card p-6 bg-white grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-[#111111] mb-1">
+              <label className="block text-[13px] font-semibold text-ink mb-1">
                 Target Financial Account
               </label>
               <select
                 value={selectedAccountId}
                 onChange={(e) => setSelectedAccountId(Number(e.target.value))}
-                className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] text-xs font-medium text-[#111111] focus:outline-hidden"
+                className="w-full px-3 py-2 rounded-xl border border-line text-[13px] font-medium text-ink focus:outline-hidden"
               >
                 {accounts.map((a) => (
                   <option key={a.id} value={a.id}>
@@ -202,7 +198,7 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
                 onChange={(e) => setApplyRules(e.target.checked)}
                 className="w-4 h-4 rounded-md accent-[#080808]"
               />
-              <label htmlFor="applyRulesCheck" className="text-xs font-medium text-[#111111] cursor-pointer">
+              <label htmlFor="applyRulesCheck" className="text-[13px] font-medium text-ink cursor-pointer">
                 Auto-apply categorization rules to matched transactions
               </label>
             </div>
@@ -210,18 +206,18 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
 
           {/* Column Mapping Controls */}
           <div className="elevate-card p-6 bg-white space-y-4">
-            <h3 className="text-sm font-bold text-[#111111]">Column Mapping</h3>
-            <p className="text-xs text-[#706F6A]">
+            <h3 className="text-sm font-bold text-ink">Column Mapping</h3>
+            <p className="text-[13px] text-muted">
               We automatically detected column headers. Adjust if any field is mapped incorrectly.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-[13px]">
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Date Column *</label>
+                <label className="block font-medium text-muted mb-1">Date Column *</label>
                 <select
                   value={mapping.date_col}
                   onChange={(e) => setMapping({ ...mapping, date_col: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] bg-white"
+                  className="w-full px-3 py-2 rounded-xl border border-line bg-white"
                 >
                   {preview.available_columns.map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -230,11 +226,11 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
               </div>
 
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Description Column *</label>
+                <label className="block font-medium text-muted mb-1">Description Column *</label>
                 <select
                   value={mapping.description_col}
                   onChange={(e) => setMapping({ ...mapping, description_col: e.target.value })}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] bg-white"
+                  className="w-full px-3 py-2 rounded-xl border border-line bg-white"
                 >
                   {preview.available_columns.map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -243,11 +239,11 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
               </div>
 
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Amount Column (Signed)</label>
+                <label className="block font-medium text-muted mb-1">Amount Column (Signed)</label>
                 <select
                   value={mapping.amount_col || ''}
                   onChange={(e) => setMapping({ ...mapping, amount_col: e.target.value || null })}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] bg-white"
+                  className="w-full px-3 py-2 rounded-xl border border-line bg-white"
                 >
                   <option value="">-- None (use Debit/Credit) --</option>
                   {preview.available_columns.map((c) => (
@@ -257,11 +253,11 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
               </div>
 
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Debit Column (Outflow)</label>
+                <label className="block font-medium text-muted mb-1">Debit Column (Outflow)</label>
                 <select
                   value={mapping.debit_col || ''}
                   onChange={(e) => setMapping({ ...mapping, debit_col: e.target.value || null })}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] bg-white"
+                  className="w-full px-3 py-2 rounded-xl border border-line bg-white"
                 >
                   <option value="">-- None --</option>
                   {preview.available_columns.map((c) => (
@@ -271,11 +267,11 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
               </div>
 
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Credit Column (Inflow)</label>
+                <label className="block font-medium text-muted mb-1">Credit Column (Inflow)</label>
                 <select
                   value={mapping.credit_col || ''}
                   onChange={(e) => setMapping({ ...mapping, credit_col: e.target.value || null })}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] bg-white"
+                  className="w-full px-3 py-2 rounded-xl border border-line bg-white"
                 >
                   <option value="">-- None --</option>
                   {preview.available_columns.map((c) => (
@@ -285,11 +281,11 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
               </div>
 
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Merchant (Optional)</label>
+                <label className="block font-medium text-muted mb-1">Merchant (Optional)</label>
                 <select
                   value={mapping.merchant_col || ''}
                   onChange={(e) => setMapping({ ...mapping, merchant_col: e.target.value || null })}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] bg-white"
+                  className="w-full px-3 py-2 rounded-xl border border-line bg-white"
                 >
                   <option value="">-- None --</option>
                   {preview.available_columns.map((c) => (
@@ -356,13 +352,13 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
             return (
               <div className="space-y-4">
                 {hasDateError && detectedDateCol && (
-                  <div className="p-4 rounded-2xl bg-[#FFF0E2] border border-[#FF6908]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[#111111]">
+                  <div className="p-4 rounded-2xl bg-ember-soft border border-[#FF6908]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[13px] text-ink">
                     <div className="flex items-center gap-2.5">
-                      <AlertTriangle className="w-5 h-5 text-[#FF6908] shrink-0" />
+                      <AlertTriangle className="w-5 h-5 text-ember-deep shrink-0" />
                       <div>
-                        <span className="font-bold text-[#111111]">Column Alignment Recommendation:</span>
-                        <p className="text-[#706F6A]">
-                          Column <span className="font-semibold text-[#111111]">'{mapping.date_col}'</span> contains ticket/ID data. Detected date timestamps in column <span className="font-semibold text-[#FF6908]">'{detectedDateCol}'</span>.
+                        <span className="font-bold text-ink">Column Alignment Recommendation:</span>
+                        <p className="text-muted">
+                          Column <span className="font-semibold text-ink">'{mapping.date_col}'</span> contains ticket/ID data. Detected date timestamps in column <span className="font-semibold text-ember-deep">'{detectedDateCol}'</span>.
                         </p>
                       </div>
                     </div>
@@ -377,7 +373,7 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
                           description_col: newDesc,
                         });
                       }}
-                      className="btn-black py-2 px-4 whitespace-nowrap text-xs shadow-sm hover:bg-[#FF6908] transition-colors"
+                      className="btn-black py-2 px-4 whitespace-nowrap text-[13px] shadow-sm hover:bg-[#FF6908] transition-colors"
                     >
                       Auto-Align to '{detectedDateCol}'
                     </button>
@@ -385,18 +381,18 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
                 )}
 
                 <div className="elevate-card bg-white overflow-hidden">
-                  <div className="p-4 bg-[#F8F3E9] border-b border-[#E9E1D5] flex items-center justify-between text-xs">
-                    <span className="font-bold text-[#111111]">
+                  <div className="p-4 bg-sand border-b border-line flex items-center justify-between text-[13px]">
+                    <span className="font-bold text-ink">
                       Sample Parsed Rows (First 25 of {preview.total_detected_rows})
                     </span>
-                    <span className="text-[#706F6A]">
+                    <span className="text-muted">
                       {validCount} valid, {invalidCount} skipped/invalid
                     </span>
                   </div>
 
                   <div className="overflow-x-auto max-h-72">
-                    <table className="w-full text-left text-xs">
-                      <thead className="bg-[#FFFCF5] text-[#706F6A] border-b border-[#E9E1D5]">
+                    <table className="app-table w-full text-left text-[13px]">
+                      <thead className="bg-paper text-muted border-b border-line">
                         <tr>
                           <th className="py-2.5 px-4">Row</th>
                           <th className="py-2.5 px-4">Parsed Date</th>
@@ -405,12 +401,12 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
                           <th className="py-2.5 px-4 text-center">Status</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-[#E9E1D5]">
+                      <tbody className="divide-y divide-line">
                         {evaluatedRows.map((r) => (
                           <tr key={r.row_number} className={r.is_valid ? '' : 'bg-red-50/50'}>
-                            <td className="py-2.5 px-4 font-mono text-[#706F6A]">#{r.row_number}</td>
+                            <td className="py-2.5 px-4 font-mono text-muted">#{r.row_number}</td>
                             <td className="py-2.5 px-4">{r.parsed_date}</td>
-                            <td className="py-2.5 px-4 font-medium text-[#111111]">
+                            <td className="py-2.5 px-4 font-medium text-ink">
                               {r.parsed_description}
                             </td>
                             <td className="py-2.5 px-4 text-right font-bold">
@@ -441,7 +437,7 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
           <div className="flex items-center justify-between pt-4">
             <button
               onClick={() => setStep(1)}
-              className="btn-secondary px-4 py-2.5 text-xs flex items-center gap-1.5"
+              className="btn-secondary px-4 py-2.5 text-[13px] flex items-center gap-1.5"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back</span>
@@ -450,10 +446,10 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
             <button
               onClick={handleConfirmImport}
               disabled={loading || preview.valid_count === 0}
-              className="btn-black px-6 py-2.5 text-xs flex items-center gap-2 font-medium disabled:opacity-50"
+              className="btn-black px-6 py-2.5 text-[13px] flex items-center gap-2 font-medium disabled:opacity-50"
             >
               <span>{loading ? 'Importing Rows...' : `Confirm Import (${preview.valid_count} Rows)`}</span>
-              <ArrowRight className="w-4 h-4 text-[#FF6908]" />
+              <ArrowRight className="w-4 h-4 text-ember-deep" />
             </button>
           </div>
         </div>
@@ -462,12 +458,12 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
       {/* Step 3: Success Confirmation */}
       {step === 3 && importResult && (
         <div className="elevate-card p-10 bg-white text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-green-50 text-[#287650] flex items-center justify-center mx-auto">
+          <div className="w-16 h-16 rounded-full bg-green-50 text-ok flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-10 h-10" />
           </div>
-          <h2 className="text-2xl font-bold text-[#111111]">Import Successfully Committed</h2>
-          <p className="text-sm text-[#706F6A] max-w-md mx-auto">
-            Successfully imported <strong className="text-[#111111]">{importResult.imported_rows}</strong> transactions into your ledger.
+          <h2 className="text-2xl font-bold text-ink">Import Successfully Committed</h2>
+          <p className="text-sm text-muted max-w-md mx-auto">
+            Successfully imported <strong className="text-ink">{importResult.imported_rows}</strong> transactions into your ledger.
             {importResult.skipped_rows > 0 && ` (${importResult.skipped_rows} invalid rows skipped)`}.
           </p>
 
@@ -478,13 +474,13 @@ export const ImportWizard: React.FC<ImportWizardProps> = ({ onImportComplete }) 
                 setFile(null);
                 setPreview(null);
               }}
-              className="btn-secondary px-5 py-2.5 text-xs font-medium"
+              className="btn-secondary px-5 py-2.5 text-[13px] font-medium"
             >
               Import Another File
             </button>
             <button
               onClick={onImportComplete}
-              className="btn-black px-6 py-2.5 text-xs font-medium flex items-center gap-2"
+              className="btn-black px-6 py-2.5 text-[13px] font-medium flex items-center gap-2"
             >
               <span>View Transactions</span>
               <ArrowRight className="w-4 h-4" />

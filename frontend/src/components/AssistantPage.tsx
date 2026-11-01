@@ -30,19 +30,11 @@ export const AssistantPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-in fade-in duration-300">
+    <div className="max-w-4xl mx-auto space-y-6 page-stagger">
       {/* Header */}
       <div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF0E2] border border-[#FF6908]/20 text-xs font-semibold text-[#FF6908] mb-2">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>ZERO-HALLUCINATION TELEMETRY</span>
-        </div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111111]">
-          Natural Language Finance Assistant
-        </h1>
-        <p className="text-sm text-[#706F6A] mt-0.5">
-          Ask questions in plain English. Every figure is deterministically calculated from your stored transactions with real-time AI telemetry.
-        </p>
+        <h1 className="font-display text-[34px] sm:text-[40px] leading-[1.02] tracking-[-0.01em] text-ink">Assistant</h1>
+        <p className="text-sm text-muted mt-2 max-w-xl leading-relaxed">Ask in plain English. Every figure is computed from your ledger and shown with its source.</p>
       </div>
 
       {/* Input Box */}
@@ -59,12 +51,12 @@ export const AssistantPage: React.FC = () => {
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             placeholder="Ask about spending, recurring subscriptions, budgets, or cash flow..."
-            className="flex-1 px-4 py-3 rounded-2xl border border-[#E9E1D5] text-sm text-[#111111] focus:outline-hidden focus:border-[#111111] focus:ring-1 focus:ring-[#111111]"
+            className="flex-1 px-4 py-3 rounded-2xl border border-line text-sm text-ink focus:outline-hidden focus:border-[#111111] focus:ring-1 focus:ring-[#111111]"
           />
           <button
             type="submit"
             disabled={loading || !question.trim()}
-            className="btn-black px-6 py-3 text-xs font-semibold flex items-center gap-2 disabled:opacity-50"
+            className="btn-black px-6 py-3 text-[13px] font-semibold flex items-center gap-2 disabled:opacity-50"
           >
             <span>{loading ? 'Synthesizing...' : 'Query'}</span>
             <Send className="w-3.5 h-3.5" />
@@ -73,13 +65,13 @@ export const AssistantPage: React.FC = () => {
 
         {/* Suggested Queries */}
         <div className="pt-2 flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-semibold text-[#706F6A]">Suggested:</span>
+          <span className="text-[11px] font-semibold text-muted">Suggested:</span>
           {examplePrompts.map((p, i) => (
             <button
               key={i}
               type="button"
               onClick={() => handleAsk(p)}
-              className="text-[11px] px-3 py-1 rounded-full bg-[#F8F3E9] text-[#111111] hover:bg-[#FFF5DF] border border-[#E9E1D5] transition-colors"
+              className="text-[11px] px-3 py-1 rounded-full bg-sand text-ink hover:bg-cream border border-line transition-colors"
             >
               {p}
             </button>
@@ -92,38 +84,38 @@ export const AssistantPage: React.FC = () => {
         {history.map((item, idx) => (
           <div key={idx} className="elevate-card p-6 bg-white space-y-4">
             {/* User Question */}
-            <div className="flex items-center gap-2 text-sm font-bold text-[#111111] border-b border-[#E9E1D5] pb-3">
-              <span className="w-6 h-6 rounded-lg bg-[#080808] text-white flex items-center justify-center text-xs">
+            <div className="flex items-center gap-2 text-sm font-bold text-ink border-b border-line pb-3">
+              <span className="w-6 h-6 rounded-lg bg-[#080808] text-white flex items-center justify-center text-[13px]">
                 Q
               </span>
               <span>{item.query}</span>
             </div>
 
             {/* AI Synthesized Grounded Explanation */}
-            <div className="p-4 rounded-2xl bg-[#FFF5DF] border border-[#E9E1D5]">
-              <div className="flex items-center gap-2 mb-2 text-xs font-bold text-[#FF6908]">
+            <div className="p-4 rounded-2xl bg-cream border border-line">
+              <div className="flex items-center gap-2 mb-2 text-[13px] font-bold text-ember-deep">
                 <Bot className="w-4 h-4" />
                 <span>AI Grounded Financial Analysis</span>
               </div>
-              <p className="text-sm text-[#111111] leading-relaxed">
+              <p className="text-sm text-ink leading-relaxed">
                 {item.response.explanation}
               </p>
             </div>
 
             {/* AI Execution Telemetry Bar */}
-            <div className="p-3 rounded-xl bg-[#F8F3E9] border border-[#E9E1D5]/80 grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs text-[#111111]">
+            <div className="p-3 rounded-xl bg-sand border border-line/80 grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-[13px] text-ink">
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[#FF6908]" />
+                <Clock className="w-4 h-4 text-ember-deep" />
                 <div>
-                  <div className="text-[10px] uppercase font-semibold text-[#706F6A]">Latency</div>
+                  <div className="text-[10px] uppercase font-semibold text-muted">Latency</div>
                   <div className="font-mono font-bold text-[12px]">{item.response.latency_ms ?? 0} ms</div>
                 </div>
               </div>
 
               <div className="flex items-center gap-2">
-                <Coins className="w-4 h-4 text-[#287650]" />
+                <Coins className="w-4 h-4 text-ok" />
                 <div>
-                  <div className="text-[10px] uppercase font-semibold text-[#706F6A]">Cost</div>
+                  <div className="text-[10px] uppercase font-semibold text-muted">Cost</div>
                   <div className="font-mono font-bold text-[12px]">
                     ${Number(item.response.cost_usd ?? 0).toFixed(6)}
                   </div>
@@ -133,9 +125,9 @@ export const AssistantPage: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Layers className="w-4 h-4 text-[#3559E0]" />
                 <div>
-                  <div className="text-[10px] uppercase font-semibold text-[#706F6A]">Tokens</div>
+                  <div className="text-[10px] uppercase font-semibold text-muted">Tokens</div>
                   <div className="font-mono font-bold text-[12px]">
-                    {item.response.total_tokens ?? 0} <span className="text-[10px] text-[#706F6A] font-normal">({item.response.prompt_tokens ?? 0} in / {item.response.completion_tokens ?? 0} out)</span>
+                    {item.response.total_tokens ?? 0} <span className="text-[10px] text-muted font-normal">({item.response.prompt_tokens ?? 0} in / {item.response.completion_tokens ?? 0} out)</span>
                   </div>
                 </div>
               </div>
@@ -143,8 +135,8 @@ export const AssistantPage: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Cpu className="w-4 h-4 text-[#9333EA]" />
                 <div className="min-w-0">
-                  <div className="text-[10px] uppercase font-semibold text-[#706F6A]">Model Source</div>
-                  <div className="font-semibold text-[11px] truncate text-[#111111]" title={item.response.model_source ?? 'Grounded AI Engine'}>
+                  <div className="text-[10px] uppercase font-semibold text-muted">Model Source</div>
+                  <div className="font-semibold text-[11px] truncate text-ink" title={item.response.model_source ?? 'Grounded AI Engine'}>
                     {item.response.model_source ?? 'Grounded AI Engine'}
                   </div>
                 </div>
@@ -152,26 +144,26 @@ export const AssistantPage: React.FC = () => {
             </div>
 
             {/* Meta & Evidence Citations */}
-            <div className="flex flex-wrap items-center justify-between text-xs text-[#706F6A] pt-1">
+            <div className="flex flex-wrap items-center justify-between text-[13px] text-muted pt-1">
               <span className="flex items-center gap-1.5">
-                <Database className="w-3.5 h-3.5 text-[#287650]" />
-                Range: <strong className="text-[#111111]">{item.response.date_range_applied}</strong>
+                <Database className="w-3.5 h-3.5 text-ok" />
+                Range: <strong className="text-ink">{item.response.date_range_applied}</strong>
               </span>
-              <span className="text-[11px] font-medium text-[#287650]">
+              <span className="text-[11px] font-medium text-ok">
                 {item.response.confidence_note}
               </span>
             </div>
 
             {/* Supporting Transactions Table */}
             {item.response.supporting_transactions.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-[#E9E1D5]">
-                <div className="text-xs font-bold text-[#111111] mb-2 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-[#287650]" />
+              <div className="mt-4 pt-4 border-t border-line">
+                <div className="text-[13px] font-bold text-ink mb-2 flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-ok" />
                   <span>Verifiable Supporting Transaction Records:</span>
                 </div>
-                <div className="rounded-xl border border-[#E9E1D5] overflow-hidden">
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-[#F8F3E9] text-[#706F6A]">
+                <div className="rounded-xl border border-line overflow-hidden">
+                  <table className="app-table w-full text-left text-[13px]">
+                    <thead className="bg-sand text-muted">
                       <tr>
                         <th className="py-2 px-3">ID</th>
                         <th className="py-2 px-3">Date</th>
@@ -180,14 +172,14 @@ export const AssistantPage: React.FC = () => {
                         <th className="py-2 px-3 text-right">Amount</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#E9E1D5]">
+                    <tbody className="divide-y divide-line">
                       {item.response.supporting_transactions.map((st) => (
-                        <tr key={st.id} className="hover:bg-[#FFFCF5]">
-                          <td className="py-2 px-3 font-mono text-[#706F6A]">#{st.id}</td>
+                        <tr key={st.id} className="hover:bg-paper">
+                          <td className="py-2 px-3 font-mono text-muted">#{st.id}</td>
                           <td className="py-2 px-3">{st.transaction_date}</td>
-                          <td className="py-2 px-3 font-medium text-[#111111]">{st.merchant || st.description}</td>
-                          <td className="py-2 px-3 text-[#706F6A]">{st.category_name}</td>
-                          <td className="py-2 px-3 text-right font-bold text-[#111111]">
+                          <td className="py-2 px-3 font-medium text-ink">{st.merchant || st.description}</td>
+                          <td className="py-2 px-3 text-muted">{st.category_name}</td>
+                          <td className="py-2 px-3 text-right font-bold text-ink">
                             ${Number(st.amount).toFixed(2)}
                           </td>
                         </tr>
@@ -201,10 +193,10 @@ export const AssistantPage: React.FC = () => {
         ))}
 
         {history.length === 0 && !loading && (
-          <div className="p-12 text-center text-[#706F6A] bg-white rounded-3xl border border-[#E9E1D5]">
-            <Bot className="w-12 h-12 text-[#FF6908] mx-auto mb-3" />
-            <h3 className="text-base font-bold text-[#111111] mb-1">Ask anything about your financial records</h3>
-            <p className="text-xs max-w-sm mx-auto">
+          <div className="p-12 text-center text-muted bg-white rounded-3xl border border-line">
+            <Bot className="w-12 h-12 text-ember-deep mx-auto mb-3" />
+            <h3 className="text-base font-bold text-ink mb-1">Ask anything about your financial records</h3>
+            <p className="text-[13px] max-w-sm mx-auto">
               Click one of the suggested queries above or type your own question to inspect calculations, full AI model telemetry, and supporting transactions.
             </p>
           </div>

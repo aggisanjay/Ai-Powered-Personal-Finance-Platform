@@ -87,19 +87,15 @@ export const ReceiptsPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div className="space-y-6 page-stagger">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111111]">
-            Receipts & OCR Extraction
-          </h1>
-          <p className="text-sm text-[#706F6A] mt-0.5">
-            Privately upload receipts, review extracted totals, and verify transactions
-          </p>
+          <h1 className="font-display text-[34px] sm:text-[40px] leading-[1.02] tracking-[-0.01em] text-ink">Receipts</h1>
+          <p className="text-sm text-muted mt-2 max-w-xl leading-relaxed">Upload receipts, review what OCR extracted, then confirm each one.</p>
         </div>
 
-        <label className="btn-black px-4 py-2.5 text-xs font-medium cursor-pointer inline-flex items-center gap-2">
+        <label className="btn-black px-4 py-2.5 text-[13px] font-medium cursor-pointer inline-flex items-center gap-2">
           <Upload className="w-4 h-4" />
           <span>{uploading ? 'Scanning...' : 'Upload Receipt'}</span>
           <input
@@ -118,7 +114,7 @@ export const ReceiptsPage: React.FC = () => {
           receipts.map((rec) => (
             <div key={rec.id} className="elevate-card p-5 bg-white space-y-4">
               <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-2xl bg-[#FFF0E2] text-[#FF6908] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-2xl bg-ember-soft text-ember-deep flex items-center justify-center">
                   <ReceiptIcon className="w-5 h-5" />
                 </div>
                 <span className={`text-[10px] px-2 py-0.5 rounded-sm font-semibold ${
@@ -131,28 +127,28 @@ export const ReceiptsPage: React.FC = () => {
               </div>
 
               <div>
-                <h3 className="font-bold text-sm text-[#111111]">
+                <h3 className="font-bold text-sm text-ink">
                   {rec.extracted_merchant || rec.file_name}
                 </h3>
-                <div className="text-xs text-[#706F6A] mt-0.5">
+                <div className="text-[13px] text-muted mt-0.5">
                   Scanned: {rec.extracted_date || 'Today'} · ${Number(rec.extracted_total || 0).toFixed(2)}
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-[#E9E1D5] flex items-center justify-between">
-                <span className="text-[11px] text-[#969087]">
+              <div className="pt-2 border-t border-line flex items-center justify-between">
+                <span className="text-[11px] text-muted">
                   {rec.mime_type.split('/')[1]?.toUpperCase()} · {(rec.file_size_bytes / 1024).toFixed(1)} KB
                 </span>
 
                 {!rec.transaction_id ? (
                   <button
                     onClick={() => openReviewModal(rec)}
-                    className="btn-black px-3 py-1.5 text-xs"
+                    className="btn-black px-3 py-1.5 text-[13px]"
                   >
                     Review & Link
                   </button>
                 ) : (
-                  <span className="text-xs font-semibold text-[#287650] flex items-center gap-1">
+                  <span className="text-[13px] font-semibold text-ok flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     Verified #{rec.transaction_id}
                   </span>
@@ -161,7 +157,7 @@ export const ReceiptsPage: React.FC = () => {
             </div>
           ))
         ) : (
-          <div className="col-span-full p-12 text-center text-sm text-[#706F6A] bg-white rounded-3xl border border-[#E9E1D5]">
+          <div className="col-span-full p-12 text-center text-sm text-muted bg-white rounded-3xl border border-line">
             {loading ? 'Loading receipts...' : 'No receipts uploaded yet. Click "Upload Receipt" above.'}
           </div>
         )}
@@ -170,54 +166,54 @@ export const ReceiptsPage: React.FC = () => {
       {/* Review Modal */}
       {selectedReceipt && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="bg-white border border-[#E9E1D5] rounded-3xl p-6 max-w-md w-full shadow-2xl">
-            <h3 className="text-xl font-bold text-[#111111] mb-1">Review Scanned Receipt</h3>
-            <p className="text-xs text-[#706F6A] mb-4">
+          <div className="bg-white border border-line rounded-3xl p-6 max-w-md w-full shadow-2xl">
+            <h3 className="text-xl font-bold text-ink mb-1">Review Scanned Receipt</h3>
+            <p className="text-[13px] text-muted mb-4">
               Verify extracted fields before creating a permanent transaction in your ledger.
             </p>
 
-            <form onSubmit={handleConfirmTransaction} className="space-y-3 text-xs">
+            <form onSubmit={handleConfirmTransaction} className="space-y-3 text-[13px]">
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Merchant / Vendor</label>
+                <label className="block font-medium text-muted mb-1">Merchant / Vendor</label>
                 <input
                   type="text"
                   required
                   value={reviewMerchant}
                   onChange={(e) => setReviewMerchant(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] text-sm focus:outline-hidden"
+                  className="w-full px-3 py-2 rounded-xl border border-line text-sm focus:outline-hidden"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-medium text-[#706F6A] mb-1">Total Amount ($)</label>
+                  <label className="block font-medium text-muted mb-1">Total Amount ($)</label>
                   <input
                     type="number"
                     step="0.01"
                     required
                     value={reviewAmount}
                     onChange={(e) => setReviewAmount(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] text-sm focus:outline-hidden"
+                    className="w-full px-3 py-2 rounded-xl border border-line text-sm focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="block font-medium text-[#706F6A] mb-1">Receipt Date</label>
+                  <label className="block font-medium text-muted mb-1">Receipt Date</label>
                   <input
                     type="date"
                     required
                     value={reviewDate}
                     onChange={(e) => setReviewDate(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] text-xs focus:outline-hidden"
+                    className="w-full px-3 py-2 rounded-xl border border-line text-[13px] focus:outline-hidden"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Account to Charge</label>
+                <label className="block font-medium text-muted mb-1">Account to Charge</label>
                 <select
                   value={reviewAccountId}
                   onChange={(e) => setReviewAccountId(Number(e.target.value))}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] text-xs focus:outline-hidden"
+                  className="w-full px-3 py-2 rounded-xl border border-line text-[13px] focus:outline-hidden"
                 >
                   {accounts.map((a) => (
                     <option key={a.id} value={a.id}>{a.name}</option>
@@ -226,11 +222,11 @@ export const ReceiptsPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Category</label>
+                <label className="block font-medium text-muted mb-1">Category</label>
                 <select
                   value={reviewCategoryId}
                   onChange={(e) => setReviewCategoryId(e.target.value ? Number(e.target.value) : '')}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] text-xs focus:outline-hidden"
+                  className="w-full px-3 py-2 rounded-xl border border-line text-[13px] focus:outline-hidden"
                 >
                   <option value="">Unassigned</option>
                   {categories.map((c) => (
@@ -239,7 +235,7 @@ export const ReceiptsPage: React.FC = () => {
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#E9E1D5]">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-line">
                 <button
                   type="button"
                   onClick={() => setSelectedReceipt(null)}

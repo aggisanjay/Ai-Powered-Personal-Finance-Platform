@@ -1,101 +1,278 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------ *
+ * Aura design tokens
+ * App world  = warm paper (Elevate identity, refined)
+ * Stage world = warm ink (landing). Both share one ember accent.
+ * ------------------------------------------------------------------ */
+@theme {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-ink: #111111;
+  --color-night: #0d0b09;
+  --color-night-2: #16130f;
+  --color-vellum: #f4ede0;
+  --color-paper: #fffcf5;
+  --color-cream: #fff5df;
+  --color-sand: #f8f3e9;
+  --color-line: #e9e1d5;
+  --color-ember: #ff6908;
+  --color-ember-deep: #c74a00;
+  --color-ember-soft: #fff0e2;
+  --color-ok: #287650;
+  --color-warn: #a66513;
+  --color-bad: #b83d35;
+  --color-muted: #6a6861;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Section themes for the landing page (one component, two worlds) */
+.theme-night {
+  --s-bg: #0d0b09;
+  --s-fg: #f4ede0;
+  --s-muted: rgba(244, 237, 224, 0.64);
+  --s-faint: rgba(244, 237, 224, 0.4);
+  --s-line: rgba(244, 237, 224, 0.12);
+  --s-card: rgba(244, 237, 224, 0.045);
+  --s-card-hi: rgba(244, 237, 224, 0.08);
+  --s-accent: #ff6908;
+  color-scheme: dark;
+}
+.theme-paper {
+  --s-bg: #f4ede0;
+  --s-fg: #14110d;
+  --s-muted: rgba(20, 17, 13, 0.66);
+  --s-faint: rgba(20, 17, 13, 0.42);
+  --s-line: rgba(20, 17, 13, 0.12);
+  --s-card: #fbf7ee;
+  --s-card-hi: #ffffff;
+  --s-accent: #c74a00;
+  color-scheme: light;
+}
+
 @layer base {
-  :root {
-    --bg-main: #FFFCF5;
-    --bg-cream: #FFF5DF;
-    --bg-yellow: #FFF0C9;
-    --bg-surface: #FFFFFF;
-    --bg-soft: #F8F3E9;
-    --text-primary: #111111;
-    --text-secondary: #706F6A;
-    --text-muted: #969087;
-    --btn-primary: #080808;
-    --btn-primary-hover: #292929;
-    --accent-orange: #FF6908;
-    --accent-orange-soft: #FFF0E2;
-    --border-warm: #E9E1D5;
-    --status-success: #287650;
-    --status-warning: #A66513;
-    --status-error: #B83D35;
+  html {
+    background: #0d0b09; /* no white flash before the app paints */
+    scroll-behavior: auto;
+    overflow-x: clip;
   }
-
   body {
-    background-color: var(--bg-main);
-    color: var(--text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
     margin: 0;
-    padding: 0;
     min-height: 100vh;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--color-ember);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ember);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+  button,
+  [role="button"],
+  select,
+  summary,
+  a {
+    cursor: pointer;
   }
 }
 
-/* Custom Elevate Utility Classes */
+/* ------------------------------ App primitives ------------------------------ */
 .elevate-card {
-  background-color: #FFFFFF;
-  border: 1px solid #E9E1D5;
-  border-radius: 18px;
-  box-shadow: 0 4px 20px -2px rgba(17, 17, 17, 0.03);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background: #fff;
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  box-shadow: 0 1px 0 rgba(17, 17, 17, 0.02), 0 12px 32px -18px rgba(60, 40, 10, 0.16);
+  transition: border-color 0.25s var(--ease-out-quart), box-shadow 0.3s var(--ease-out-quart),
+    transform 0.3s var(--ease-out-quart);
 }
-
 .elevate-card:hover {
-  border-color: #D8CEBE;
-  box-shadow: 0 6px 24px -2px rgba(17, 17, 17, 0.05);
+  border-color: #d9cfbf;
+  box-shadow: 0 1px 0 rgba(17, 17, 17, 0.02), 0 18px 40px -20px rgba(60, 40, 10, 0.24);
 }
-
 .elevate-card-cream {
-  background-color: #FFF5DF;
-  border: 1px solid #E9E1D5;
-  border-radius: 18px;
+  background: var(--color-cream);
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
 }
 
 .btn-black {
-  background-color: #080808;
-  color: #FFFFFF;
-  border-radius: 12px;
+  background: #0d0b09;
+  color: #fff;
+  border-radius: 999px;
   font-weight: 500;
-  transition: all 0.15s ease-in-out;
+  letter-spacing: -0.005em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 6px 16px -8px rgba(13, 11, 9, 0.6);
+  transition: background 0.2s ease, transform 0.2s var(--ease-out-quart), box-shadow 0.2s ease;
 }
-
 .btn-black:hover {
-  background-color: #292929;
+  background: #2a2520;
   transform: translateY(-1px);
 }
-
-.btn-secondary {
-  background-color: #FFFFFF;
-  color: #111111;
-  border: 1px solid #E9E1D5;
-  border-radius: 12px;
-  font-weight: 500;
-  transition: all 0.15s ease-in-out;
+.btn-black:active {
+  transform: translateY(0) scale(0.98);
 }
-
+.btn-black:disabled {
+  opacity: 0.5;
+  transform: none;
+  cursor: not-allowed;
+}
+.btn-secondary {
+  background: #fff;
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  font-weight: 500;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s var(--ease-out-quart);
+}
 .btn-secondary:hover {
-  background-color: #F8F3E9;
-  border-color: #D8CEBE;
+  background: var(--color-sand);
+  border-color: #d9cfbf;
+}
+.btn-secondary:active {
+  transform: scale(0.98);
 }
 
 .badge-orange {
-  background-color: #FFF0E2;
-  color: #FF6908;
-  border: 1px solid rgba(255, 105, 8, 0.2);
+  background: var(--color-ember-soft);
+  color: var(--color-ember-deep);
+  border: 1px solid rgba(255, 105, 8, 0.22);
 }
 
-/* Custom scrollbars */
+/* Inputs get one consistent, quiet treatment */
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+select,
+textarea {
+  font-family: inherit;
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-ember) !important;
+  box-shadow: 0 0 0 3px rgba(255, 105, 8, 0.16);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum", "zero";
+  letter-spacing: -0.01em;
+}
+
+/* Tables: calm rows, readable at small sizes */
+.app-table th {
+  font-weight: 500;
+  color: var(--color-muted);
+}
+.app-table tbody tr {
+  transition: background 0.15s ease;
+}
+.app-table tbody tr:hover {
+  background: #fdf8ec;
+}
+
+/* Skeletons (loading feedback that keeps layout stable) */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #efe8da;
+  border-radius: 10px;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Film grain: unifies WebGL and UI, hides banding */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  mix-blend-mode: overlay;
+}
+
+/* Mask-reveal helper used by headline lines */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #E9E1D5;
-  border-radius: 3px;
+  background: #ddd3c3;
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #D8CEBE;
+  background: #c9bda9;
 }
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Staggered page entrance for existing pages */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.page-stagger > * {
+  animation: rise 0.65s var(--ease-out-expo) both;
+}
+.page-stagger > *:nth-child(2) { animation-delay: 0.05s; }
+.page-stagger > *:nth-child(3) { animation-delay: 0.1s; }
+.page-stagger > *:nth-child(4) { animation-delay: 0.15s; }
+.page-stagger > *:nth-child(5) { animation-delay: 0.2s; }
+.page-stagger > *:nth-child(n + 6) { animation-delay: 0.25s; }

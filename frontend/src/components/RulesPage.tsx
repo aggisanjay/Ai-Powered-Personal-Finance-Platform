@@ -118,16 +118,12 @@ export const RulesPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-8 page-stagger">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#111111] tracking-tight">
-            Categorization Rules & Categories
-          </h1>
-          <p className="text-sm text-[#706F6A] mt-1">
-            Deterministic rules execute first with strict priority before any AI classification suggestions.
-          </p>
+          <h1 className="font-display text-[34px] sm:text-[40px] leading-[1.02] tracking-[-0.01em] text-ink">Rules and categories</h1>
+          <p className="text-sm text-muted mt-2 max-w-xl leading-relaxed">Rules run first, in priority order. AI only suggests for what they miss.</p>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -135,14 +131,14 @@ export const RulesPage: React.FC = () => {
             disabled={reprocessing}
             className="btn-secondary px-4 py-2.5 text-sm font-medium flex items-center gap-2"
           >
-            <Play className={`w-4 h-4 text-[#FF6908] ${reprocessing ? 'animate-spin' : ''}`} />
+            <Play className={`w-4 h-4 text-ember-deep ${reprocessing ? 'animate-spin' : ''}`} />
             <span>{reprocessing ? 'Reprocessing...' : 'Execute Rules on Data'}</span>
           </button>
           <button
             onClick={() => setIsCatModalOpen(true)}
             className="btn-secondary px-4 py-2.5 text-sm font-medium flex items-center gap-2"
           >
-            <Tag className="w-4 h-4 text-[#706F6A]" />
+            <Tag className="w-4 h-4 text-muted" />
             <span>New Category</span>
           </button>
           <button
@@ -159,8 +155,8 @@ export const RulesPage: React.FC = () => {
         <div
           className={`p-4 rounded-xl flex items-center gap-3 text-sm font-medium ${
             message.type === 'success'
-              ? 'bg-[#287650]/10 text-[#287650] border border-[#287650]/20'
-              : 'bg-[#B83D35]/10 text-[#B83D35] border border-[#B83D35]/20'
+              ? 'bg-[#287650]/10 text-ok border border-[#287650]/20'
+              : 'bg-[#B83D35]/10 text-bad border border-[#B83D35]/20'
           }`}
         >
           {message.type === 'success' ? (
@@ -174,26 +170,26 @@ export const RulesPage: React.FC = () => {
 
       {/* Rules Table */}
       <div className="elevate-card overflow-hidden">
-        <div className="p-6 border-b border-[#E9E1D5] flex items-center justify-between bg-[#FFFDF9]">
+        <div className="p-6 border-b border-line flex items-center justify-between bg-[#FFFDF9]">
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-[#FF6908]" />
-            <h2 className="text-base font-semibold text-[#111111]">Deterministic Priority Queue</h2>
+            <Filter className="w-4 h-4 text-ember-deep" />
+            <h2 className="text-base font-semibold text-ink">Deterministic Priority Queue</h2>
           </div>
-          <span className="text-xs text-[#706F6A] font-medium px-2.5 py-1 bg-[#F8F3E9] rounded-lg border border-[#E9E1D5]">
+          <span className="text-[13px] text-muted font-medium px-2.5 py-1 bg-sand rounded-lg border border-line">
             {rules.length} Rules Active
           </span>
         </div>
 
         {loading ? (
-          <div className="p-12 text-center text-sm text-[#706F6A]">Loading rules...</div>
+          <div className="p-12 text-center text-sm text-muted">Loading rules...</div>
         ) : rules.length === 0 ? (
-          <div className="p-12 text-center text-sm text-[#706F6A]">
+          <div className="p-12 text-center text-sm text-muted">
             No categorization rules defined yet. Create your first rule to automate merchant tagging.
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-[#111111]">
-              <thead className="bg-[#FAF7F0] border-b border-[#E9E1D5] text-xs font-semibold text-[#706F6A] uppercase tracking-wider">
+            <table className="app-table w-full text-left text-sm text-ink">
+              <thead className="bg-[#FAF7F0] border-b border-line text-[13px] font-semibold text-muted uppercase tracking-wider">
                 <tr>
                   <th className="py-3 px-6">Priority</th>
                   <th className="py-3 px-6">Rule Name</th>
@@ -203,26 +199,26 @@ export const RulesPage: React.FC = () => {
                   <th className="py-3 px-6 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#E9E1D5]/60">
+              <tbody className="divide-y divide-line/60">
                 {rules.map((rule) => {
                   const cat = categories.find((c) => c.id === rule.target_category_id);
                   return (
                     <tr key={rule.id} className="hover:bg-[#FFFDF9] transition-colors">
-                      <td className="py-4 px-6 font-mono text-xs font-semibold text-[#706F6A]">
+                      <td className="py-4 px-6 font-mono text-[13px] font-semibold text-muted">
                         #{rule.priority}
                       </td>
-                      <td className="py-4 px-6 font-medium text-[#111111]">{rule.name}</td>
-                      <td className="py-4 px-6 capitalize text-xs text-[#706F6A]">
-                        <span className="px-2 py-1 rounded bg-[#F8F3E9] border border-[#E9E1D5]">
+                      <td className="py-4 px-6 font-medium text-ink">{rule.name}</td>
+                      <td className="py-4 px-6 capitalize text-[13px] text-muted">
+                        <span className="px-2 py-1 rounded bg-sand border border-line">
                           {rule.field_to_match}
                         </span>
                       </td>
-                      <td className="py-4 px-6 font-mono text-xs text-[#111111]">
+                      <td className="py-4 px-6 font-mono text-[13px] text-ink">
                         <code>{rule.pattern}</code>
                       </td>
                       <td className="py-4 px-6">
                         <span
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[13px] font-medium"
                           style={{
                             backgroundColor: `${cat?.color || '#FF6908'}15`,
                             color: cat?.color || '#FF6908',
@@ -239,7 +235,7 @@ export const RulesPage: React.FC = () => {
                       <td className="py-4 px-6 text-right">
                         <button
                           onClick={() => handleDeleteRule(rule.id)}
-                          className="p-1.5 text-[#969087] hover:text-[#B83D35] hover:bg-[#B83D35]/10 rounded-lg transition-colors"
+                          className="p-1.5 text-muted hover:text-bad hover:bg-[#B83D35]/10 rounded-lg transition-colors"
                           title="Delete Rule"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -256,20 +252,20 @@ export const RulesPage: React.FC = () => {
 
       {/* Categories Grid */}
       <div className="elevate-card p-6">
-        <h2 className="text-base font-semibold text-[#111111] mb-4">Configured Categories</h2>
+        <h2 className="text-base font-semibold text-ink mb-4">Configured Categories</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {categories.map((c) => (
             <div
               key={c.id}
-              className="p-3 rounded-xl border border-[#E9E1D5] bg-[#FFFDF9] flex items-center gap-2.5"
+              className="p-3 rounded-xl border border-line bg-[#FFFDF9] flex items-center gap-2.5"
             >
               <span
                 className="w-3 h-3 rounded-full flex-shrink-0"
                 style={{ backgroundColor: c.color }}
               />
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-semibold text-[#111111] truncate">{c.name}</p>
-                <p className="text-[10px] text-[#706F6A]">{c.is_income ? 'Income' : 'Expense'}</p>
+                <p className="text-[13px] font-semibold text-ink truncate">{c.name}</p>
+                <p className="text-[10px] text-muted">{c.is_income ? 'Income' : 'Expense'}</p>
               </div>
             </div>
           ))}
@@ -279,69 +275,69 @@ export const RulesPage: React.FC = () => {
       {/* Add Rule Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-[#E9E1D5] max-w-md w-full p-6 shadow-2xl animate-in zoom-in-95 duration-150">
-            <h3 className="text-lg font-bold text-[#111111] mb-1">Add Categorization Rule</h3>
-            <p className="text-xs text-[#706F6A] mb-5">
+          <div className="bg-white rounded-2xl border border-line max-w-md w-full p-6 shadow-2xl animate-in zoom-in-95 duration-150">
+            <h3 className="text-lg font-bold text-ink mb-1">Add Categorization Rule</h3>
+            <p className="text-[13px] text-muted mb-5">
               Automate category assignments when transactions match this keyword or regex.
             </p>
 
             <form onSubmit={handleCreateRule} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-[#706F6A] mb-1">Rule Name</label>
+                <label className="block text-[13px] font-medium text-muted mb-1">Rule Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g., Netflix Subscription"
                   value={ruleName}
                   onChange={(e) => setRuleName(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-xl border border-[#E9E1D5] focus:outline-hidden focus:border-[#111111]"
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-line focus:outline-hidden focus:border-[#111111]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#706F6A] mb-1">Keyword / Pattern</label>
+                <label className="block text-[13px] font-medium text-muted mb-1">Keyword / Pattern</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g., netflix|disney"
                   value={pattern}
                   onChange={(e) => setPattern(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-xl border border-[#E9E1D5] focus:outline-hidden focus:border-[#111111] font-mono"
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-line focus:outline-hidden focus:border-[#111111] font-mono"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-[#706F6A] mb-1">Field to Match</label>
+                  <label className="block text-[13px] font-medium text-muted mb-1">Field to Match</label>
                   <select
                     value={fieldToMatch}
                     onChange={(e) => setFieldToMatch(e.target.value)}
-                    className="w-full px-3 py-2 text-sm rounded-xl border border-[#E9E1D5] focus:outline-hidden focus:border-[#111111]"
+                    className="w-full px-3 py-2 text-sm rounded-xl border border-line focus:outline-hidden focus:border-[#111111]"
                   >
                     <option value="description">Description</option>
                     <option value="merchant">Merchant</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-[#706F6A] mb-1">Priority</label>
+                  <label className="block text-[13px] font-medium text-muted mb-1">Priority</label>
                   <input
                     type="number"
                     min="1"
                     max="100"
                     value={priority}
                     onChange={(e) => setPriority(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-xl border border-[#E9E1D5] focus:outline-hidden focus:border-[#111111]"
+                    className="w-full px-3 py-2 text-sm rounded-xl border border-line focus:outline-hidden focus:border-[#111111]"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#706F6A] mb-1">Target Category</label>
+                <label className="block text-[13px] font-medium text-muted mb-1">Target Category</label>
                 <select
                   required
                   value={targetCategoryId}
                   onChange={(e) => setTargetCategoryId(Number(e.target.value))}
-                  className="w-full px-3 py-2 text-sm rounded-xl border border-[#E9E1D5] focus:outline-hidden focus:border-[#111111]"
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-line focus:outline-hidden focus:border-[#111111]"
                 >
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -351,7 +347,7 @@ export const RulesPage: React.FC = () => {
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E9E1D5]">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-line">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
@@ -374,35 +370,35 @@ export const RulesPage: React.FC = () => {
       {/* Add Category Modal */}
       {isCatModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-[#E9E1D5] max-w-sm w-full p-6 shadow-2xl animate-in zoom-in-95 duration-150">
-            <h3 className="text-lg font-bold text-[#111111] mb-1">Create Category</h3>
-            <p className="text-xs text-[#706F6A] mb-5">
+          <div className="bg-white rounded-2xl border border-line max-w-sm w-full p-6 shadow-2xl animate-in zoom-in-95 duration-150">
+            <h3 className="text-lg font-bold text-ink mb-1">Create Category</h3>
+            <p className="text-[13px] text-muted mb-5">
               Add a custom category for classifying income and spending.
             </p>
 
             <form onSubmit={handleCreateCategory} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-[#706F6A] mb-1">Category Name</label>
+                <label className="block text-[13px] font-medium text-muted mb-1">Category Name</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g., Pet Care"
                   value={newCatName}
                   onChange={(e) => setNewCatName(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-xl border border-[#E9E1D5] focus:outline-hidden focus:border-[#111111]"
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-line focus:outline-hidden focus:border-[#111111]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-[#706F6A] mb-1">Color</label>
+                <label className="block text-[13px] font-medium text-muted mb-1">Color</label>
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
                     value={newCatColor}
                     onChange={(e) => setNewCatColor(e.target.value)}
-                    className="w-10 h-10 p-0 rounded-lg cursor-pointer border border-[#E9E1D5]"
+                    className="w-10 h-10 p-0 rounded-lg cursor-pointer border border-line"
                   />
-                  <span className="text-xs font-mono text-[#706F6A]">{newCatColor}</span>
+                  <span className="text-[13px] font-mono text-muted">{newCatColor}</span>
                 </div>
               </div>
 
@@ -414,12 +410,12 @@ export const RulesPage: React.FC = () => {
                   onChange={(e) => setNewCatIsIncome(e.target.checked)}
                   className="rounded text-[#080808] focus:ring-0"
                 />
-                <label htmlFor="catIncome" className="text-xs text-[#111111] font-medium">
+                <label htmlFor="catIncome" className="text-[13px] text-ink font-medium">
                   This is an Income category
                 </label>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E9E1D5]">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-line">
                 <button
                   type="button"
                   onClick={() => setIsCatModalOpen(false)}

@@ -117,29 +117,25 @@ export const TransactionsPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div className="space-y-6 page-stagger">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111111]">
-            Transactions Ledger
-          </h1>
-          <p className="text-sm text-[#706F6A] mt-0.5">
-            Audit, categorize, and inspect all financial records
-          </p>
+          <h1 className="font-display text-[34px] sm:text-[40px] leading-[1.02] tracking-[-0.01em] text-ink">Transactions</h1>
+          <p className="text-sm text-muted mt-2 max-w-xl leading-relaxed">Audit, categorize and inspect every record in your ledger.</p>
         </div>
 
         <div className="flex items-center gap-3">
           <button
             onClick={handleExport}
-            className="btn-secondary px-3.5 py-2 text-xs flex items-center gap-1.5"
+            className="btn-secondary px-3.5 py-2 text-[13px] flex items-center gap-1.5"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export CSV</span>
           </button>
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="btn-black px-4 py-2 text-xs flex items-center gap-1.5"
+            className="btn-black px-4 py-2 text-[13px] flex items-center gap-1.5"
           >
             <Plus className="w-4 h-4" />
             <span>Add Transaction</span>
@@ -150,13 +146,13 @@ export const TransactionsPage: React.FC = () => {
       {/* Filter Bar */}
       <div className="elevate-card p-4 bg-white flex flex-col md:flex-row items-center gap-4">
         <div className="relative flex-1 w-full">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#969087]" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search transactions by merchant, description, or amount..."
-            className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-[#E9E1D5] focus:outline-hidden focus:border-[#111111]"
+            className="w-full pl-10 pr-4 py-2 text-[13px] rounded-xl border border-line focus:outline-hidden focus:border-[#111111]"
           />
         </div>
 
@@ -164,7 +160,7 @@ export const TransactionsPage: React.FC = () => {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-[#E9E1D5] bg-white text-xs text-[#111111] focus:outline-hidden"
+            className="px-3 py-2 rounded-xl border border-line bg-white text-[13px] text-ink focus:outline-hidden"
           >
             <option value="">All Categories</option>
             {categories.map((c) => (
@@ -177,7 +173,7 @@ export const TransactionsPage: React.FC = () => {
           <select
             value={selectedAccount}
             onChange={(e) => setSelectedAccount(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-[#E9E1D5] bg-white text-xs text-[#111111] focus:outline-hidden"
+            className="px-3 py-2 rounded-xl border border-line bg-white text-[13px] text-ink focus:outline-hidden"
           >
             <option value="">All Accounts</option>
             {accounts.map((a) => (
@@ -192,8 +188,8 @@ export const TransactionsPage: React.FC = () => {
       {/* Transactions Table */}
       <div className="elevate-card bg-white overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-[#F8F3E9] text-[#706F6A] font-semibold border-b border-[#E9E1D5]">
+          <table className="app-table w-full text-left text-[13px]">
+            <thead className="bg-sand text-muted font-semibold border-b border-line">
               <tr>
                 <th className="py-3 px-4">Date</th>
                 <th className="py-3 px-4">Description / Merchant</th>
@@ -203,26 +199,26 @@ export const TransactionsPage: React.FC = () => {
                 <th className="py-3 px-4 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E9E1D5]">
+            <tbody className="divide-y divide-line">
               {transactions.length > 0 ? (
                 transactions.map((tx) => (
-                  <tr key={tx.id} className="hover:bg-[#FFFCF5] transition-colors">
-                    <td className="py-3.5 px-4 font-medium text-[#706F6A] whitespace-nowrap">
+                  <tr key={tx.id} className="hover:bg-paper transition-colors">
+                    <td className="py-3.5 px-4 font-medium text-muted whitespace-nowrap">
                       {tx.transaction_date}
                     </td>
                     <td className="py-3.5 px-4">
-                      <div className="font-bold text-[#111111]">
+                      <div className="font-bold text-ink">
                         {tx.merchant || tx.description}
                       </div>
                       {tx.merchant && (
-                        <div className="text-[11px] text-[#969087]">{tx.description}</div>
+                        <div className="text-[11px] text-muted">{tx.description}</div>
                       )}
                     </td>
                     <td className="py-3.5 px-4">
                       <select
                         value={tx.category_id || ''}
                         onChange={(e) => handleCategoryChange(tx.id, Number(e.target.value))}
-                        className="px-2 py-1 rounded-lg border border-[#E9E1D5] bg-white text-[11px] font-medium text-[#111111] focus:outline-hidden"
+                        className="px-2 py-1 rounded-lg border border-line bg-white text-[11px] font-medium text-ink focus:outline-hidden"
                       >
                         <option value="">Unassigned</option>
                         {categories.map((c) => (
@@ -244,14 +240,14 @@ export const TransactionsPage: React.FC = () => {
                       </span>
                     </td>
                     <td className="py-3.5 px-4 text-right font-bold whitespace-nowrap">
-                      <span className={Number(tx.amount) > 0 ? 'text-[#287650]' : 'text-[#111111]'}>
+                      <span className={Number(tx.amount) > 0 ? 'text-ok' : 'text-ink'}>
                         {Number(tx.amount) > 0 ? '+' : ''}${Math.abs(Number(tx.amount)).toFixed(2)}
                       </span>
                     </td>
                     <td className="py-3.5 px-4 text-center">
                       <button
                         onClick={() => handleDelete(tx.id)}
-                        className="p-1.5 text-[#969087] hover:text-red-600 rounded-md hover:bg-red-50 transition-colors"
+                        className="p-1.5 text-muted hover:text-red-600 rounded-md hover:bg-red-50 transition-colors"
                         title="Delete transaction"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -261,7 +257,7 @@ export const TransactionsPage: React.FC = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-[#706F6A]">
+                  <td colSpan={6} className="py-12 text-center text-muted">
                     {loading ? 'Loading transactions...' : 'No transactions found matching criteria.'}
                   </td>
                 </tr>
@@ -274,17 +270,17 @@ export const TransactionsPage: React.FC = () => {
       {/* Add Transaction Modal */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-          <div className="bg-white border border-[#E9E1D5] rounded-3xl p-6 max-w-md w-full shadow-2xl">
-            <h3 className="text-xl font-bold text-[#111111] mb-4">Add Transaction</h3>
-            <form onSubmit={handleCreate} className="space-y-3 text-xs">
+          <div className="bg-white border border-line rounded-3xl p-6 max-w-md w-full shadow-2xl">
+            <h3 className="text-xl font-bold text-ink mb-4">Add Transaction</h3>
+            <form onSubmit={handleCreate} className="space-y-3 text-[13px]">
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Type</label>
+                <label className="block font-medium text-muted mb-1">Type</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setIsExpense(true)}
                     className={`py-2 rounded-xl font-semibold border ${
-                      isExpense ? 'bg-[#080808] text-white border-[#080808]' : 'bg-[#F8F3E9] text-[#706F6A] border-[#E9E1D5]'
+                      isExpense ? 'bg-[#080808] text-white border-[#080808]' : 'bg-sand text-muted border-line'
                     }`}
                   >
                     Expense (-)
@@ -293,7 +289,7 @@ export const TransactionsPage: React.FC = () => {
                     type="button"
                     onClick={() => setIsExpense(false)}
                     className={`py-2 rounded-xl font-semibold border ${
-                      !isExpense ? 'bg-[#287650] text-white border-[#287650]' : 'bg-[#F8F3E9] text-[#706F6A] border-[#E9E1D5]'
+                      !isExpense ? 'bg-[#287650] text-white border-[#287650]' : 'bg-sand text-muted border-line'
                     }`}
                   >
                     Income (+)
@@ -302,7 +298,7 @@ export const TransactionsPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Amount ($)</label>
+                <label className="block font-medium text-muted mb-1">Amount ($)</label>
                 <input
                   type="number"
                   step="0.01"
@@ -310,50 +306,50 @@ export const TransactionsPage: React.FC = () => {
                   value={newAmount}
                   onChange={(e) => setNewAmount(e.target.value)}
                   placeholder="45.50"
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] text-sm focus:outline-hidden"
+                  className="w-full px-3 py-2 rounded-xl border border-line text-sm focus:outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Description / Memo</label>
+                <label className="block font-medium text-muted mb-1">Description / Memo</label>
                 <input
                   type="text"
                   required
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
                   placeholder="Grocery trip"
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] text-sm focus:outline-hidden"
+                  className="w-full px-3 py-2 rounded-xl border border-line text-sm focus:outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Merchant (Optional)</label>
+                <label className="block font-medium text-muted mb-1">Merchant (Optional)</label>
                 <input
                   type="text"
                   value={newMerchant}
                   onChange={(e) => setNewMerchant(e.target.value)}
                   placeholder="Trader Joe's"
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] text-sm focus:outline-hidden"
+                  className="w-full px-3 py-2 rounded-xl border border-line text-sm focus:outline-hidden"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-medium text-[#706F6A] mb-1">Date</label>
+                  <label className="block font-medium text-muted mb-1">Date</label>
                   <input
                     type="date"
                     required
                     value={newDate}
                     onChange={(e) => setNewDate(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] text-xs focus:outline-hidden"
+                    className="w-full px-3 py-2 rounded-xl border border-line text-[13px] focus:outline-hidden"
                   />
                 </div>
                 <div>
-                  <label className="block font-medium text-[#706F6A] mb-1">Account</label>
+                  <label className="block font-medium text-muted mb-1">Account</label>
                   <select
                     value={newAccountId}
                     onChange={(e) => setNewAccountId(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] text-xs focus:outline-hidden"
+                    className="w-full px-3 py-2 rounded-xl border border-line text-[13px] focus:outline-hidden"
                   >
                     {accounts.map((a) => (
                       <option key={a.id} value={a.id}>{a.name}</option>
@@ -363,11 +359,11 @@ export const TransactionsPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-medium text-[#706F6A] mb-1">Category (Optional)</label>
+                <label className="block font-medium text-muted mb-1">Category (Optional)</label>
                 <select
                   value={newCategoryId}
                   onChange={(e) => setNewCategoryId(e.target.value ? Number(e.target.value) : '')}
-                  className="w-full px-3 py-2 rounded-xl border border-[#E9E1D5] text-xs focus:outline-hidden"
+                  className="w-full px-3 py-2 rounded-xl border border-line text-[13px] focus:outline-hidden"
                 >
                   <option value="">Auto-assign via rules</option>
                   {categories.map((c) => (
@@ -376,7 +372,7 @@ export const TransactionsPage: React.FC = () => {
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#E9E1D5]">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-line">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
