@@ -54,6 +54,7 @@ const AppContent: React.FC = () => {
   const [viewingLanding, setViewingLanding] = useState<boolean>(!localStorage.getItem('token'));
   const [menuOpen, setMenuOpen] = useState(false);
 
+  // Automatically transition between Workspace Dashboard and Landing/Login when auth state changes
   useEffect(() => {
     if (user) {
       setViewingLanding(false);
