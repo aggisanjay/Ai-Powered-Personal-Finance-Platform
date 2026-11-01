@@ -11,6 +11,13 @@ from backend.app.analytics.calculator import (
 )
 from backend.app.ai.llm_client import generate_ai_explanation
 
+MONTH_NAMES = {
+    "january": 1, "jan": 1, "february": 2, "feb": 2, "march": 3, "mar": 3,
+    "april": 4, "apr": 4, "may": 5, "june": 6, "jun": 6, "july": 7, "jul": 7,
+    "august": 8, "aug": 8, "september": 9, "sep": 9, "sept": 9,
+    "october": 10, "oct": 10, "november": 11, "nov": 11, "december": 12, "dec": 12,
+}
+
 def query_grounded_assistant(
     db: Session,
     user_id: int,
@@ -26,11 +33,26 @@ def query_grounded_assistant(
     """
     q_lower = question.lower()
     today = date.today()
-    current_month_str = explicit_period or f"{today.year}-{today.month:02d}"
 
-    # Determine intent & timeframe
-    is_last_month = "last month" in q_lower or "previous month" in q_lower
-    target_month = get_previous_month_str(current_month_str) if is_last_month else current_month_str
+    # Determine target month: explicit period -> ISO pattern -> Month name in question -> relative -> today's month
+    target_month = explicit_period
+    if not target_month:
+        m_iso = re.search(r'\b(20\d\d)-(0[1-9]|1[0-2])\b', question)
+        if m_iso:
+            target_month = m_iso.group(0)
+        else:
+            m_name = re.search(
+                r'\b(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sep|sept|oct|nov|dec)\b(?:\s+(20\d\d))?',
+                q_lower
+            )
+            if m_name:
+                m_num = MONTH_NAMES[m_name.group(1)]
+                yr = int(m_name.group(2)) if m_name.group(2) else today.year
+                target_month = f"{yr}-{m_num:02d}"
+            elif "last month" in q_lower or "previous month" in q_lower:
+                target_month = get_previous_month_str(f"{today.year}-{today.month:02d}")
+            else:
+                target_month = f"{today.year}-{today.month:02d}"
 
     start_date, end_date = get_month_date_range(target_month)
 
